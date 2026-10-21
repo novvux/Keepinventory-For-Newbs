@@ -1,0 +1,4 @@
+{
+  "keepinventoryfornewbs.grace.active": "Защита ресурсов включена: %s часов %s минут осталось. Введите /keepinv для просмотра статуса.",
+  "keepinventoryfornewbs.grace.none": "Защита новичка кончилась."
+}

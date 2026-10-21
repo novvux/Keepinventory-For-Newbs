@@ -1,0 +1,4 @@
+{
+  "keepinventoryfornewbs.grace.active": "Keep-inventory protection is active: %s h %s min left. Write /keepinv to check status",
+  "keepinventoryfornewbs.grace.none": "You have no keep-inventory protection left."
+}
