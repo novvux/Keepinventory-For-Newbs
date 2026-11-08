@@ -1,5 +1,7 @@
 package com.novvux.keepnewbs;
 
+import com.novvux.keepnewbs.compat.ModCompat;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -82,6 +84,10 @@ public final class GraceManager {
         snapshot.putFloat(SNAP_XP_PROGRESS, player.experienceProgress);
         snapshot.putInt(SNAP_SELECTED, inventory.selected);
 
+        // Mods like Curios or Accessories manage their own inventory and remove the items from it
+        // when the player dies, so their slots have to be saved as well.
+        ModCompat.save(player, snapshot);
+
         player.getPersistentData().put(KEY_SNAPSHOT, snapshot);
     }
 
@@ -111,6 +117,8 @@ public final class GraceManager {
             respawnedPlayer.totalExperience = snapshot.getInt(SNAP_XP_TOTAL);
             respawnedPlayer.experienceProgress = snapshot.getFloat(SNAP_XP_PROGRESS);
         }
+
+        ModCompat.restore(respawnedPlayer, snapshot);
 
         data.remove(KEY_SNAPSHOT);
     }

@@ -1,5 +1,6 @@
 package com.novvux.keepnewbs;
 
+import com.novvux.keepnewbs.compat.ModCompat;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -22,6 +23,7 @@ public class KeepinventoryForNewbs {
         // The grace period is a server side setting, it is stored in
         // <server>/config/keepinventoryfornewbs-server.toml
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        ModCompat.register();
 
         LOGGER.info("Keep-inventory grace period loaded, default grace period is {} hours", Config.DEFAULT_GRACE_PERIOD_HOURS);
     }

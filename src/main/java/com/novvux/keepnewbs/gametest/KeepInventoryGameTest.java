@@ -22,9 +22,8 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public class KeepInventoryGameTest {
     @GameTest(template = "keepsinventory")
-    @SuppressWarnings("removal") // makeMockServerPlayerInLevel is the only way to get a real server player in 1.21.1
     public static void keepsInventoryOnDeath(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = TestPlayers.spawn(helper);
         player.setGameMode(GameType.SURVIVAL);
         player.getAbilities().instabuild = false;
         player.getInventory().clearContent();

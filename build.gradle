@@ -26,7 +26,21 @@ sourceSets.main.resources {
 }
 
 repositories {
-    // Add here additional repositories if required by some of the dependencies below.
+    // Maven of Curios, used for the optional Curios integration.
+    maven {
+        name = 'Curios'
+        url = 'https://maven.theillusivec4.top/'
+    }
+    // Maven of Accessories and its owo-lib dependency.
+    maven {
+        name = 'WispForest'
+        url = 'https://maven.wispforest.io/releases/'
+    }
+    // Maven of the Forgified Fabric API, which Accessories needs at runtime.
+    maven {
+        name = 'Sinytra'
+        url = 'https://maven.su5ed.dev/releases'
+    }
 }
 
 base {
@@ -103,6 +117,16 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
+
+    // Optional compatibility with the inventory of Curios and Accessories. Both mods are only
+    // needed at compile time, the integration is skipped when they are not installed. They are
+    // added to localRuntime so that the game tests can exercise the integration as well.
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    localRuntime "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "io.wispforest:accessories-neoforge:${accessories_version}"
+    localRuntime "io.wispforest:accessories-neoforge:${accessories_version}"
+    localRuntime "io.wispforest:owo-lib-neoforge:${owo_version}"
+    localRuntime "org.sinytra.forgified-fabric-api:forgified-fabric-api:${forgified_fabric_api_version}"
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

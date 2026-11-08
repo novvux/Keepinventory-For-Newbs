@@ -3,6 +3,7 @@ package com.novvux.keepnewbs;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -45,6 +46,9 @@ public final class GraceEvents {
         }
 
         if (!GraceManager.hasGrace(player)) {
+            // A snapshot that was left over by a death that got cancelled must not protect the
+            // next death after the grace period is over.
+            GraceManager.clearSnapshot(player);
             return;
         }
 
@@ -52,7 +56,7 @@ public final class GraceEvents {
         GraceManager.storeSnapshot(player);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onLivingDrops(LivingDropsEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -66,10 +70,11 @@ public final class GraceEvents {
 
         // The items of the player are only collected by NeoForge at this point, cancelling
         // the event keeps them out of the world. They are restored on respawn instead.
+        event.getDrops().clear();
         event.setCanceled(true);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onExperienceDrop(LivingExperienceDropEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -83,7 +88,9 @@ public final class GraceEvents {
         event.setCanceled(true);
     }
 
-    @SubscribeEvent
+    // LOWEST: Curios, Accessories and NeoForge itself copy their player data in their own
+    // PlayerEvent.Clone listeners, so the restore has to happen after those.
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (!(event.getOriginal() instanceof ServerPlayer deadPlayer) || !(event.getEntity() instanceof ServerPlayer respawnedPlayer)) {
             return;

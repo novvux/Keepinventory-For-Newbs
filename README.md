@@ -11,6 +11,8 @@ Feature
 * While the grace period is active the player behaves like the vanilla `keepInventory` game rule:
   nothing is dropped on death and the inventory, the armour, the offhand item and the experience
   are given back on respawn.
+* The slots of **Curios** and **Accessories** are kept as well. Both mods are optional, the
+  integration is only active when they are installed.
 * When the grace period is over the normal death rules apply again.
 * The command `/keepinv` shows how much of the grace period is left.
 
@@ -36,6 +38,8 @@ Notes
   respawn after logging back in.
 * The feature is compatible with the vanilla `keepInventory` game rule, if the game rule is
   enabled the whole inventory of every player is kept anyway.
+* Curios and Accessories remove their items from the player during the death drops, so their slots
+  are copied when the player dies and written back when the player respawns.
 
 Building
 --------
@@ -50,13 +54,17 @@ it in a development environment.
 Testing
 -------
 
-The mod ships with a game test that kills a player inside the grace period and checks that the
-inventory, the armour and the experience are restored on respawn and that nothing was dropped
-into the world:
+The mod ships with game tests that kill a player inside the grace period and check that the
+inventory, the armour, the experience and the Curios/Accessories slots are restored on respawn and
+that nothing was dropped into the world:
 
 ```
 ./gradlew runGameTestServer
 ```
+
+The Curios and Accessories tests are skipped when the mod is not installed. Curios does not define
+player slots on its own (they come from the data packs of content mods), so its test only runs in a
+development environment that provides such a data pack.
 
 Additional Resources:
 =====================
